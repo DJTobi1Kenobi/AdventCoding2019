@@ -21,34 +21,34 @@ try:
             break
         elif intcode[n] < 100:
             operator = intcode[n]
-            if operator <= 2 or 4 < operator < 7 or operator >= 7:
+            if operator <= 2 or 4 < operator < 7 or operator >= 7:  # looking for more than 1 operator
                 x = intcode[n + 1]  # Indexing
                 y = intcode[n + 2]
                 z = intcode[n + 3]
                 c = intcode[x]
                 b = intcode[y]
-            else:
+            else:  # Only one operator, avoids indexing errors
                 x = intcode[n + 1]
         else:
-            parameter = [int(d) for d in str(intcode[n])]
-            operator = parameter[-1]
+            parameter = [int(d) for d in str(intcode[n])]  # Find modes
+            operator = parameter[-1]  # Find operator from list
             if len(parameter) == 3:
                 x = intcode[n + 1]  # Indexing
                 y = intcode[n + 2]
                 z = intcode[n + 3]
-                c = intcode[n + 1]
-                if operator <= 2 or operator >= 5:
+                c = intcode[n + 1]  # If len 3, c will always be in immediate mode
+                if operator <= 2 or operator >= 5:  # more than one operator, need to define b
                     b = intcode[y]
             elif len(parameter) == 4:
                 x = intcode[n + 1]  # Indexing
                 y = intcode[n + 2]
                 z = intcode[n + 3]
-                if parameter[1] == 1:
+                if parameter[1] == 1:   # Check mode for c
                     c = intcode[n + 1]
                 else:
                     c = intcode[x]
-                b = intcode[n + 2]
-            elif len(parameter) == 5:
+                b = intcode[n + 2]  # If len 4, b will always be in immediate mode
+            elif len(parameter) == 5:  # Not really needed for now, added to be robust
                 x = intcode[n + 1]  # Indexing
                 y = intcode[n + 2]
                 z = intcode[n + 3]
@@ -80,18 +80,12 @@ try:
             n = n + 2
         elif operator == 5:
             if c > 0:
-                if len(parameter) > 1:
-                    n = b
-                else:
-                    n = intcode[y]
+                n = b
             else:
                 n = n + 3
         elif operator == 6:
             if c == 0:
-                if len(parameter) > 1:
-                    n = b
-                else:
-                    n = intcode[y]
+                n = b
             else:
                 n = n + 3
         elif operator == 7:
