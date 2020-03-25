@@ -30,7 +30,6 @@ try:
             else:
                 x = intcode[n + 1]
         else:
-            intcode[n]
             parameter = [int(d) for d in str(intcode[n])]
             operator = parameter[-1]
             if len(parameter) == 3:
